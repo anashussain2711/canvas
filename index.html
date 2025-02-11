@@ -28,7 +28,7 @@
             flex-wrap: wrap;
             gap: 20px;
             padding: 15px 30px;
-            background: rgb(255, 188, 188);
+            background: rgb(212, 234, 255);
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             justify-content: center;
@@ -43,7 +43,7 @@
         .divider {
             width: 2px;
             height: 70px;
-            background: #ddd;
+            background: #c4c4c4;
         }
 
         label {
@@ -118,6 +118,41 @@
             width: 70%;
         }
 
+        #ballCount {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgb(212, 234, 255);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .reset {
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: max-content;
+            color: black;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgb(255, 212, 212);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .reset:hover {
+            background: #ff8282;
+        }
+        .flex-wrap{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 10px;
+        }
+
         @media (max-width: 768px) {
             body {
                 overflow: hidden;
@@ -143,11 +178,11 @@
                 width: max-content;
                 font-weight: bold;
                 padding: 10px;
-                background-color: rgb(255, 188, 188);
+                background-color: rgb(212, 234, 255);
                 box-shadow: 6px 4px 14px -3px rgba(0, 0, 0, 0.1);
                 border-radius: 0 5px 5px 0;
                 position: absolute;
-                top: 15px;
+                bottom: 20px;
                 left: calc(100% - 2px);
             }
 
@@ -217,6 +252,10 @@
             </div>
         </div>
     </div>
+    <div class="flex-wrap">
+        <div id="ballCount">Balls: 0</div>
+        <button class="reset" onclick="resetBalls()">Reset</button>
+    </div>
     <canvas id="canvas"></canvas>
     <script>
         const canvas = document.getElementById("canvas");
@@ -225,6 +264,7 @@
         const sizePicker = document.getElementById("sizePicker");
         const speedPicker = document.getElementById("speedPicker");
         const settingsButton = document.querySelector("#controls .open-button");
+        const ballCountText = document.getElementById("ballCount");
 
         let boundaryWidth, boundaryHeight;
         let balls = [];
@@ -255,12 +295,14 @@
                 color: colorPicker.value
             };
             balls.push(ball);
+            updateBallCount();
         }
 
         function addRandomBall() {
             let x = Math.random() * (boundaryWidth - 150) + 70;
             let y = Math.random() * (boundaryHeight - 150) + 70;
             addBall(x, y);
+            updateBallCount();
         }
 
         function adjustValue(id, change) {
@@ -269,6 +311,10 @@
             if (newValue >= parseInt(input.min) && newValue <= parseInt(input.max)) {
                 input.value = newValue;
             }
+        }
+
+        function updateBallCount() {
+            ballCountText.textContent = `Balls: ${balls.length}`;
         }
 
         function drawBalls() {
@@ -293,6 +339,11 @@
                     ball.dy *= -1;
                 }
             });
+        }
+
+        function resetBalls() {
+            balls = [];
+            updateBallCount();
         }
 
         function animate() {
